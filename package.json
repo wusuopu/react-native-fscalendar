@@ -16,6 +16,11 @@
   ],
   "author": "",
   "license": "ISC",
+  "rnpm": {
+    "ios": {
+      "project": "RNFSCalendar.xcodeproj"
+    }
+  },
   "bugs": {
     "url": "https://github.com/wusuopu/react-native-fscalendar/issues"
   },
