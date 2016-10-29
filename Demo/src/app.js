@@ -43,6 +43,7 @@ export default class App extends Component {
                 moment('2016-11-30T00:00:00Z').toDate()
               ]}
               scopeMode={this.state.scopeMode ? 'month' : 'week'}
+              height={this.state.scopeMode ? 280 : 110}
               onSelectDate={(ev) => {
                 console.log('onSelectDate: ', ev.nativeEvent)
                 this.setState({
