@@ -11,10 +11,14 @@
 
 @implementation Calendar
 
+NSDateFormatter *formatter;
+
 - (instancetype)init
 {
     self = [super init];
     
+    formatter = [[NSDateFormatter alloc] init];
+    formatter.dateFormat = @"yyyy-MM-dd";
     self.dataSource = self;
     self.delegate = self;
 //    calendar.appearance.adjustsFontSizeToFitContentSize = NO;       // 关闭文字尺寸自适应
@@ -147,7 +151,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
 - (void)calendar:(FSCalendar *)calendar didSelectDate:(NSDate *)date
 {
 #if DEBUG
-    NSLog(@"calendar didSelectDate: %@", [self stringFromDate:date]);
+    NSLog(@"calendar didSelectDate: %@", [formatter stringFromDate:date]);
 #endif
     if (_onSelectDate) {
         _onSelectDate(@{ @"date": @([date timeIntervalSince1970] * 1000) });
@@ -159,7 +163,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
 - (void)calendar:(FSCalendar *)calendar didDeselectDate:(NSDate *)date
 {
 #if DEBUG
-    NSLog(@"calendar didDeselectDate: %@", [self stringFromDate:date]);
+    NSLog(@"calendar didDeselectDate: %@", [formatter stringFromDate:date]);
 #endif
     if (_onDeselectDate) {
         _onDeselectDate(@{ @"date": @([date timeIntervalSince1970] * 1000) });
@@ -183,7 +187,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
 - (void)calendarCurrentPageDidChange:(FSCalendar *)calendar
 {
 #if DEBUG
-    NSLog(@"calendar calendarCurrentPageDidChange: %@", [calendar stringFromDate:calendar.currentPage]);
+    NSLog(@"calendar calendarCurrentPageDidChange: %@", [formatter stringFromDate:calendar.currentPage]);
 #endif
     if (_onCurrentPageChange) {
         _onCurrentPageChange(@{ @"date": @([calendar.currentPage timeIntervalSince1970] * 1000) });
@@ -215,7 +219,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_fillSelectionColorDates.count == 0) {
         return appearance.selectionColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_fillSelectionColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -231,7 +235,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_fillDefaultColorDates.count == 0) {
         return nil;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_fillDefaultColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -247,7 +251,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_borderDefaultColorDates.count == 0) {
         return appearance.borderDefaultColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_borderDefaultColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -263,7 +267,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_borderSelectionColorDates.count == 0) {
         return appearance.borderSelectionColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_borderSelectionColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -279,7 +283,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_cellShapeDates.count == 0) {
         return FSCalendarCellShapeCircle;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *shape = [_cellShapeDates objectForKey:key];
     if (shape != nil && [shape isEqualToNumber:[NSNumber numberWithUnsignedInteger:FSCalendarCellShapeRectangle]]) {
         return FSCalendarCellShapeRectangle;
@@ -296,7 +300,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_titleDefaultColorDates.count == 0) {
         return appearance.titleDefaultColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_titleDefaultColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -311,7 +315,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_subtitleDefaultColorDates.count == 0) {
         return appearance.subtitleDefaultColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_subtitleDefaultColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -326,7 +330,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_titleSelectionColorDates.count == 0) {
         return appearance.titleSelectionColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_titleSelectionColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
@@ -341,7 +345,7 @@ CALENDAR_COLOR_SETTER_IMP(setSelectionColor)
     if (_subtitleSelectionColorDates.count == 0) {
         return appearance.subtitleSelectionColor;
     }
-    NSString *key = [calendar stringFromDate:date format:@"yyyy-MM-dd"];
+    NSString *key = [formatter stringFromDate:date];
     NSNumber *color = [_subtitleSelectionColorDates objectForKey:key];
     if (color != nil) {
         return [RCTConvert UIColor:color];
