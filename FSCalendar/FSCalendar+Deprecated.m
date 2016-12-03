@@ -7,11 +7,14 @@
 //
 
 #import "FSCalendar.h"
+#import "FSCalendarExtensions.h"
 #import "FSCalendarDynamicHeader.h"
 
 #pragma mark - Deprecate
 
 @implementation FSCalendar (Deprecated)
+
+@dynamic identifier;
 
 - (void)setShowsPlaceholders:(BOOL)showsPlaceholders
 {
@@ -23,49 +26,218 @@
     return self.placeholderType == FSCalendarPlaceholderTypeFillSixRows;
 }
 
-- (void)setCurrentMonth:(NSDate *)currentMonth
+#pragma mark - Public methods
+
+- (NSInteger)yearOfDate:(NSDate *)date
 {
-    self.currentPage = currentMonth;
+    if (!date) return NSNotFound;
+    NSDateComponents *component = [self.gregorian components:NSCalendarUnitYear fromDate:date];
+    return component.year;
 }
 
-- (NSDate *)currentMonth
+- (NSInteger)monthOfDate:(NSDate *)date
 {
-    return self.currentPage;
+    if (!date) return NSNotFound;
+    NSDateComponents *component = [self.gregorian components:NSCalendarUnitMonth
+                                                   fromDate:date];
+    return component.month;
 }
 
-- (void)setFlow:(FSCalendarFlow)flow
+- (NSInteger)dayOfDate:(NSDate *)date
 {
-    self.scrollDirection = (FSCalendarScrollDirection)flow;
+    if (!date) return NSNotFound;
+    NSDateComponents *component = [self.gregorian components:NSCalendarUnitDay
+                                                   fromDate:date];
+    return component.day;
 }
 
-- (FSCalendarFlow)flow
+- (NSInteger)weekdayOfDate:(NSDate *)date
 {
-    return (FSCalendarFlow)self.scrollDirection;
+    if (!date) return NSNotFound;
+    NSDateComponents *component = [self.gregorian components:NSCalendarUnitWeekday fromDate:date];
+    return component.weekday;
 }
 
-- (void)setSelectedDate:(NSDate *)selectedDate
+- (NSInteger)weekOfDate:(NSDate *)date
 {
-    [self selectDate:selectedDate];
+    if (!date) return NSNotFound;
+    NSDateComponents *component = [self.gregorian components:NSCalendarUnitWeekOfYear fromDate:date];
+    return component.weekOfYear;
 }
 
-- (void)setSelectedDate:(NSDate *)selectedDate animate:(BOOL)animate
+- (NSDate *)dateByIgnoringTimeComponentsOfDate:(NSDate *)date
 {
-    [self selectDate:selectedDate scrollToDate:animate];
+    if (!date) return nil;
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:date];
+    return [self.gregorian dateFromComponents:components];
 }
 
-- (BOOL)date:(NSDate *)date sharesSameMonthWithDate:(NSDate *)anotherDate
+- (NSDate *)tomorrowOfDate:(NSDate *)date
 {
-    return [self yearOfDate:date] == [self yearOfDate:anotherDate] && [self monthOfDate:date] == [self monthOfDate:anotherDate];
+    if (!date) return nil;
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour fromDate:date];
+    components.day++;
+    components.hour = FSCalendarDefaultHourComponent;
+    return [self.gregorian dateFromComponents:components];
 }
 
-- (BOOL)date:(NSDate *)date sharesSameWeekWithDate:(NSDate *)anotherDate
+- (NSDate *)yesterdayOfDate:(NSDate *)date
 {
-    return [self yearOfDate:date] == [self yearOfDate:anotherDate] && [self weekOfDate:date] == [self weekOfDate:anotherDate];
+    if (!date) return nil;
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay|NSCalendarUnitHour fromDate:date];
+    components.day--;
+    components.hour = FSCalendarDefaultHourComponent;
+    return [self.gregorian dateFromComponents:components];
 }
 
-- (BOOL)date:(NSDate *)date sharesSameDayWithDate:(NSDate *)anotherDate
+- (NSDate *)dateWithYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day
 {
-    return [self yearOfDate:date] == [self yearOfDate:anotherDate] && [self monthOfDate:date] == [self monthOfDate:anotherDate] && [self dayOfDate:date] == [self dayOfDate:anotherDate];
+    NSDateComponents *components = self.components;
+    components.year = year;
+    components.month = month;
+    components.day = day;
+    components.hour = FSCalendarDefaultHourComponent;
+    NSDate *date = [self.gregorian dateFromComponents:components];
+    components.year = NSIntegerMax;
+    components.month = NSIntegerMax;
+    components.day = NSIntegerMax;
+    components.hour = NSIntegerMax;
+    return date;
+}
+
+- (NSDate *)dateByAddingYears:(NSInteger)years toDate:(NSDate *)date
+{
+    if (!date) return nil;
+    NSDateComponents *components = self.components;
+    components.year = years;
+    NSDate *d = [self.gregorian dateByAddingComponents:components toDate:date options:0];
+    components.year = NSIntegerMax;
+    return d;
+}
+
+- (NSDate *)dateBySubstractingYears:(NSInteger)years fromDate:(NSDate *)date
+{
+    if (!date) return nil;
+    return [self dateByAddingYears:-years toDate:date];
+}
+
+- (NSDate *)dateByAddingMonths:(NSInteger)months toDate:(NSDate *)date
+{
+    if (!date) return nil;
+    NSDateComponents *components = self.components;
+    components.month = months;
+    NSDate *d = [self.gregorian dateByAddingComponents:components toDate:date options:0];
+    components.month = NSIntegerMax;
+    return d;
+}
+
+- (NSDate *)dateBySubstractingMonths:(NSInteger)months fromDate:(NSDate *)date
+{
+    return [self dateByAddingMonths:-months toDate:date];
+}
+
+- (NSDate *)dateByAddingWeeks:(NSInteger)weeks toDate:(NSDate *)date
+{
+    if (!date) return nil;
+    NSDateComponents *components = self.components;
+    components.weekOfYear = weeks;
+    NSDate *d = [self.gregorian dateByAddingComponents:components toDate:date options:0];
+    components.weekOfYear = NSIntegerMax;
+    return d;
+}
+
+- (NSDate *)dateBySubstractingWeeks:(NSInteger)weeks fromDate:(NSDate *)date
+{
+    return [self dateByAddingWeeks:-weeks toDate:date];
+}
+
+- (NSDate *)dateByAddingDays:(NSInteger)days toDate:(NSDate *)date
+{
+    if (!date) return nil;
+    NSDateComponents *components = self.components;
+    components.day = days;
+    NSDate *d = [self.gregorian dateByAddingComponents:components toDate:date options:0];
+    components.day = NSIntegerMax;
+    return d;
+}
+
+- (NSDate *)dateBySubstractingDays:(NSInteger)days fromDate:(NSDate *)date
+{
+    return [self dateByAddingDays:-days toDate:date];
+}
+
+- (NSInteger)yearsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate
+{
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitYear
+                                                    fromDate:fromDate
+                                                      toDate:toDate
+                                                     options:0];
+    return components.year;
+}
+
+- (NSInteger)monthsFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate
+{
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitMonth
+                                                    fromDate:fromDate
+                                                      toDate:toDate
+                                                     options:0];
+    return components.month;
+}
+
+- (NSInteger)weeksFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate
+{
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitWeekOfYear
+                                                    fromDate:fromDate
+                                                      toDate:toDate
+                                                     options:0];
+    return components.weekOfYear;
+}
+
+- (NSInteger)daysFromDate:(NSDate *)fromDate toDate:(NSDate *)toDate
+{
+    NSDateComponents *components = [self.gregorian components:NSCalendarUnitDay
+                                                    fromDate:fromDate
+                                                      toDate:toDate
+                                                     options:0];
+    return components.day;
+}
+
+- (BOOL)isDate:(NSDate *)date1 equalToDate:(NSDate *)date2 toCalendarUnit:(FSCalendarUnit)unit
+{
+    switch (unit) {
+        case FSCalendarUnitMonth:
+            return [self.gregorian isDate:date1 equalToDate:date2 toUnitGranularity:NSCalendarUnitMonth];
+        case FSCalendarUnitWeekOfYear:
+            return [self.gregorian isDate:date1 equalToDate:date2 toUnitGranularity:NSCalendarUnitYear];
+        case FSCalendarUnitDay:
+            return [self.gregorian isDate:date1 inSameDayAsDate:date2];
+    }
+    return NO;
+}
+
+- (BOOL)isDateInToday:(NSDate *)date
+{
+    return [self isDate:date equalToDate:[NSDate date] toCalendarUnit:FSCalendarUnitDay];
+}
+
+- (void)setIdentifier:(NSString *)identifier
+{
+    NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:identifier];
+    [self setValue:gregorian forKey:@"gregorian"];
+    [self fs_performSelector:NSSelectorFromString(@"invalidateDateTools") withObjects:nil, nil];
+    [self fs_performSelector:NSSelectorFromString(@"invalidateWeekdaySymbols") withObjects:nil, nil];
+    
+    if ([[self valueForKey:@"hasValidateVisibleLayout"] boolValue]) {
+        [self reloadData];
+    }
+    [self fs_setVariable:[self.gregorian dateBySettingHour:0 minute:0 second:0 ofDate:self.minimumDate options:0] forKey:@"_minimumDate"];
+    [self fs_setVariable:[self.gregorian dateBySettingHour:0 minute:0 second:0 ofDate:self.currentPage options:0] forKey:@"_currentPage"];
+    [self fs_performSelector:NSSelectorFromString(@"scrollToPageForDate:animated") withObjects:self.today, @NO, nil];
+}
+
+- (NSString *)identifier
+{
+    return self.gregorian.calendarIdentifier;
 }
 
 @end

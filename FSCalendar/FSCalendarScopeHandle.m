@@ -10,7 +10,7 @@
 #import "FSCalendar.h"
 #import "FSCalendarAnimator.h"
 #import "FSCalendarDynamicHeader.h"
-#import "UIView+FSExtension.h"
+#import "FSCalendarExtensions.h"
 
 @interface FSCalendarScopeHandle () <UIGestureRecognizerDelegate>
 
@@ -33,7 +33,7 @@
         UIView *view;
         
         view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 1)];
-        view.backgroundColor = FSCalendarStandardSeparatorColor;
+        view.backgroundColor = FSCalendarStandardLineColor;
         [self addSubview:view];
         self.topBorder = view;
         
@@ -50,6 +50,8 @@
         panGesture.maximumNumberOfTouches = 2;
         [self addGestureRecognizer:panGesture];
         self.panGesture = panGesture;
+        
+        self.exclusiveTouch = YES;
                 
     }
     return self;

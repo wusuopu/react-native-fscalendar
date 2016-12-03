@@ -8,13 +8,14 @@
 //  https://github.com/WenchaoD
 //
 
-#import "FSCalendarConstance.h"
+#import "FSCalendarConstants.h"
 
 CGFloat const FSCalendarStandardHeaderHeight = 40;
 CGFloat const FSCalendarStandardWeekdayHeight = 25;
 CGFloat const FSCalendarStandardMonthlyPageHeight = 300.0;
 CGFloat const FSCalendarStandardWeeklyPageHeight = 108+1/3.0;
 CGFloat const FSCalendarStandardCellDiameter = 100/3.0;
+CGFloat const FSCalendarStandardSeparatorThickness = 0.5;
 CGFloat const FSCalendarAutomaticDimension = -1;
 CGFloat const FSCalendarDefaultBounceAnimationDuration = 0.15;
 CGFloat const FSCalendarStandardRowHeight = 38+1.0/3;
@@ -26,3 +27,6 @@ CGFloat const FSCalendarMaximumEventDotDiameter = 4.8;
 CGFloat const FSCalendarStandardScopeHandleHeight = 26;
 
 NSInteger const FSCalendarDefaultHourComponent = 0;
+
+NSString * const FSCalendarDefaultCellReuseIdentifier = @"_FSCalendarDefaultCellReuseIdentifier";
+NSString * const FSCalendarInvalidArgumentsExceptionName = @"Invalid argument exception";

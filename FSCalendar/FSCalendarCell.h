@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FSCalendar.h"
-#import "FSCalendarEventIndicator.h"
+
+@class FSCalendar, FSCalendarAppearance, FSCalendarEventIndicator;
+
+typedef NS_ENUM(NSUInteger, FSCalendarMonthPosition);
 
 @interface FSCalendarCell : UICollectionViewCell
 
@@ -22,20 +24,15 @@
 @property (weak, nonatomic) CAShapeLayer *shapeLayer;
 @property (weak, nonatomic) FSCalendarEventIndicator *eventIndicator;
 
-@property (strong, nonatomic) NSDate   *date;
-@property (strong, nonatomic) NSDate   *month;
 @property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *subtitle;
 @property (strong, nonatomic) UIImage  *image;
+@property (assign, nonatomic) FSCalendarMonthPosition monthPosition;
 
-@property (assign, nonatomic) BOOL needsAdjustingViewFrame;
 @property (assign, nonatomic) NSInteger numberOfEvents;
-
-@property (assign, nonatomic) BOOL dateIsPlaceholder;
-@property (assign, nonatomic) BOOL dateIsSelected;
 @property (assign, nonatomic) BOOL dateIsToday;
-
-@property (readonly, nonatomic) BOOL weekend;
+@property (assign, nonatomic) BOOL weekend;
+@property (assign, nonatomic) BOOL placeholder;
 
 @property (strong, nonatomic) UIColor *preferredFillDefaultColor;
 @property (strong, nonatomic) UIColor *preferredFillSelectionColor;
@@ -52,7 +49,15 @@
 
 @property (strong, nonatomic) NSArray<UIColor *> *preferredEventDefaultColors;
 @property (strong, nonatomic) NSArray<UIColor *> *preferredEventSelectionColors;
-@property (assign, nonatomic) FSCalendarCellShape preferredCellShape;
+@property (assign, nonatomic) CGFloat preferredBorderRadius;
+
+// Add subviews to self.contentView and set up constraints
+- (instancetype)initWithFrame:(CGRect)frame NS_REQUIRES_SUPER;
+- (instancetype)initWithCoder:(NSCoder *)aDecoder NS_REQUIRES_SUPER;
+
+// For DIY overridden
+- (void)layoutSubviews NS_REQUIRES_SUPER; // Configure view frames
+- (void)configureAppearance NS_REQUIRES_SUPER; // Configure appearance for cell
 
 - (void)invalidateTitleFont;
 - (void)invalidateSubtitleFont;
@@ -62,7 +67,7 @@
 - (void)invalidateBorderColors;
 - (void)invalidateFillColors;
 - (void)invalidateEventColors;
-- (void)invalidateCellShapes;
+- (void)invalidateBorderRadius;
 
 - (void)invalidateImage;
 
@@ -70,3 +75,12 @@
 - (void)performSelecting;
 
 @end
+
+
+@interface FSCalendarEventIndicator : UIView
+
+@property (assign, nonatomic) NSInteger numberOfEvents;
+@property (strong, nonatomic) id color;
+
+@end
+
