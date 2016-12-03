@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Switch, Text } from 'react-native';
-import FSCalendar from 'react-native-fscalendar'
-import moment from 'moment'
+import {Scene, Router} from 'react-native-router-flux'
+import Home from './home'
+import Example1 from './example1'
+import Example2 from './example2'
+import Example3 from './example3'
+import Example4 from './example4'
+import Example5 from './example5'
+import Example6 from './example6'
 
-const styles = {
-  row: {
-    flexDirection: 'row',
-    margin: 5
-  },
-  label: {
-    flex: 1
-  }
-}
 
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      hideHeader: false,
-      hideWeekDay: false,
-      hideHeaderMinimum: false,
-      scrollEnabled: true,
-      scopeMode: true,
-    };
+    this.state = { };
   }
 
   static propTypes = { }
@@ -31,97 +21,17 @@ export default class App extends Component {
 
   render() {
     return (
-      <ScrollView style={{flex: 1}}>
-        <View style={{flex: 1, marginTop: 20}}>
-          <FSCalendar
-              hideHeader={this.state.hideHeader}
-              hideWeekDay={this.state.hideWeekDay}
-              scrollEnabled={this.state.scrollEnabled}
-              today={moment('2016-10-12T00:00:00Z').toDate()}
-              dateBounds={[
-                moment('2016-08-01T00:00:00Z').toDate(),
-                moment('2016-11-30T00:00:00Z').toDate()
-              ]}
-              scopeMode={this.state.scopeMode ? 'month' : 'week'}
-              height={this.state.scopeMode ? 280 : 110}
-              onSelectDate={(ev) => {
-                console.log('onSelectDate: ', ev.nativeEvent)
-                this.setState({
-                  selection: new Date(ev.nativeEvent.date)
-                })
-              }}
-              onDeselectDate={(ev) => {
-                console.log('onDeselectDate: ', ev.nativeEvent)
-                this.setState({
-                  deselection: new Date(ev.nativeEvent.date)
-                })
-              }}
-              onCurrentPageChange={(ev) => {
-                console.log('onCurrentPageChange: ', ev.nativeEvent)
-                this.setState({
-                  page: new Date(ev.nativeEvent.date)
-                })
-              }}
-              todayColor="#00ffff"
-              selectionColor="yellow"
-              titleDefaultColor="#6934ab"
-              fillDefaultColorDates={{
-                '2016-10-12': 'plink',
-                '2016-10-17': '#ff0000',
-                '2016-10-18': '#ff0000',
-                '2016-10-19': '#ff0000',
-                '2016-10-21': '#ff00ff',
-                '2016-10-22': '#ff00ff',
-                '2016-10-23': '#ff00ff'
-              }}
-              fillSelectionColorDates={{
-                '2016-10-12': 'plink',
-                '2016-10-17': '#ff0000',
-                '2016-10-18': '#ff0000',
-                '2016-10-19': '#ff0000'
-              }}
-              headerDateFormat="yyyy/MM"
-              headerMinimumDissolvedAlpha={this.state.hideHeaderMinimum ? 0 : 0.3}
-          />
-
-          <View style={styles.row}>
-            <Text style={styles.label}>
-              hideHeaderMinimum
-            </Text>
-            <Switch
-              onValueChange={(value) => this.setState({hideHeaderMinimum: value})}
-              value={this.state.hideHeaderMinimum}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>
-              hideWeekDay
-            </Text>
-            <Switch
-              onValueChange={(value) => this.setState({hideWeekDay: value})}
-              value={this.state.hideWeekDay}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>
-              scrollEnabled
-            </Text>
-            <Switch
-              onValueChange={(value) => this.setState({scrollEnabled: value})}
-              value={this.state.scrollEnabled}
-            />
-          </View>
-          <View style={styles.row}>
-            <Text style={styles.label}>
-              scopeMode month/week
-            </Text>
-            <Switch
-              onValueChange={(value) => this.setState({scopeMode: value})}
-              value={this.state.scopeMode}
-            />
-          </View>
-        </View>
-      </ScrollView>
-    );
+      <Router>
+        <Scene key="root">
+          <Scene key="Example1" component={Example1} title="Example1" />
+          <Scene key="Example2" component={Example2} title="Example2" />
+          <Scene key="Example3" component={Example3} title="Example3" />
+          <Scene key="Example4" component={Example4} title="Example4" />
+          <Scene key="Example5" component={Example5} title="Example5" />
+          <Scene key="Example6" component={Example6} title="Example6" />
+          <Scene key="home" component={Home} title="FSCalendar Example" initial />
+        </Scene>
+      </Router>
+    )
   }
 }
