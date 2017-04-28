@@ -11,8 +11,8 @@
 
 #import <Foundation/Foundation.h>
 #import "FSCalendar.h"
-#import "RCTComponent.h"
-#import "RCTConvert.h"
+#import <React/RCTComponent.h>
+#import <React/RCTConvert.h>
 
 #define CALENDAR_COLOR_SETTER(name)     \
 - (void) name:(UIColor *)color;
