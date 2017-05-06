@@ -9,7 +9,7 @@ export default class Example4 extends Component {
   constructor(props) {
     super(props);
     this.state = { };
-    this._month = moment().format('Y-M')
+    this._month = moment().format('Y-MM')
   }
 
   static propTypes = { }
@@ -40,6 +40,12 @@ export default class Example4 extends Component {
                 [this._month + '-17']: '#ff0000',
                 [this._month + '-18']: '#ff0000',
                 [this._month + '-19']: '#ff0000'
+              }}
+              cellShapeDates={{   // 设置日期单元的形状， 0 - Rectangle; 1 - Circle
+                [this._month + '-12']: 0,
+                [this._month + '-17']: 1,
+                [this._month + '-18']: 1,
+                [this._month + '-20']: 1
               }}
           />
         </View>
