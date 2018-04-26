@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types';
 import { Dimensions, processColor, requireNativeComponent } from 'react-native'
 import _ from 'lodash'
 
@@ -36,58 +37,58 @@ export default class FSCalendar extends Component {
   }
 
   static propTypes = {
-    width: React.PropTypes.number,
-    height: React.PropTypes.number,
-    hideHeader: React.PropTypes.bool,         // 是否隐藏头部
-    hideWeekDay: React.PropTypes.bool,        // 是否隐藏顶部的星期
-    scrollEnabled: React.PropTypes.bool,
-    today: React.PropTypes.instanceOf(Date),
-    dateBounds: React.PropTypes.arrayOf(Date),
-    scopeMode: React.PropTypes.oneOf(['month', 'week']),
+    width: PropTypes.number,
+    height: PropTypes.number,
+    hideHeader: PropTypes.bool,         // 是否隐藏头部
+    hideWeekDay: PropTypes.bool,        // 是否隐藏顶部的星期
+    scrollEnabled: PropTypes.bool,
+    today: PropTypes.instanceOf(Date),
+    dateBounds: PropTypes.arrayOf(Date),
+    scopeMode: PropTypes.oneOf(['month', 'week']),
 
     // 回调函数
-    onSelectDate: React.PropTypes.func,
-    onDeselectDate: React.PropTypes.func,
-    onCurrentPageChange: React.PropTypes.func,
+    onSelectDate: PropTypes.func,
+    onDeselectDate: PropTypes.func,
+    onCurrentPageChange: PropTypes.func,
 
     // 颜色样式
-    headerTitleColor: React.PropTypes.string,
-    weekdayTextColor: React.PropTypes.string,
-    titleDefaultColor: React.PropTypes.string,
-    titleSelectionColor: React.PropTypes.string,
-    subtitleDefaultColor: React.PropTypes.string,
-    subtitleSelectionColor: React.PropTypes.string,
-    titleWeekendColor: React.PropTypes.string,
-    subtitleWeekendColor: React.PropTypes.string,
-    titleTodayColor: React.PropTypes.string,
-    subtitleTodayColor: React.PropTypes.string,
-    titlePlaceholderColor: React.PropTypes.string,
-    subtitlePlaceholderColor: React.PropTypes.string,
+    headerTitleColor: PropTypes.string,
+    weekdayTextColor: PropTypes.string,
+    titleDefaultColor: PropTypes.string,
+    titleSelectionColor: PropTypes.string,
+    subtitleDefaultColor: PropTypes.string,
+    subtitleSelectionColor: PropTypes.string,
+    titleWeekendColor: PropTypes.string,
+    subtitleWeekendColor: PropTypes.string,
+    titleTodayColor: PropTypes.string,
+    subtitleTodayColor: PropTypes.string,
+    titlePlaceholderColor: PropTypes.string,
+    subtitlePlaceholderColor: PropTypes.string,
 
-    todayColor: React.PropTypes.string,
-    todaySelectionColor: React.PropTypes.string,
-    eventColor: React.PropTypes.string,
-    eventDefaultColor: React.PropTypes.string,
-    eventSelectionColor: React.PropTypes.string,
-    borderDefaultColor: React.PropTypes.string,
-    borderSelectionColor: React.PropTypes.string,
-    selectionColor: React.PropTypes.string,
+    todayColor: PropTypes.string,
+    todaySelectionColor: PropTypes.string,
+    eventColor: PropTypes.string,
+    eventDefaultColor:PropTypes.string,
+    eventSelectionColor:PropTypes.string,
+    borderDefaultColor: PropTypes.string,
+    borderSelectionColor: PropTypes.string,
+    selectionColor: PropTypes.string,
 
     // 针对每个单独的日期设置样式
-    fillDefaultColorDates: React.PropTypes.object,
-    fillSelectionColorDates: React.PropTypes.object,
-    borderDefaultColorDates: React.PropTypes.object,
-    borderSelectionColorDates: React.PropTypes.object,
-    cellShapeDates: React.PropTypes.objectOf(React.PropTypes.number),
+    fillDefaultColorDates: PropTypes.object,
+    fillSelectionColorDates: PropTypes.object,
+    borderDefaultColorDates: PropTypes.object,
+    borderSelectionColorDates: PropTypes.object,
+    cellShapeDates: PropTypes.objectOf(PropTypes.number),
 
-    titleDefaultColorDates: React.PropTypes.object,
-    titleSelectionColorDates: React.PropTypes.object,
-    subtitleDefaultColorDates: React.PropTypes.object,
-    subtitleSelectionColorDates: React.PropTypes.object,
+    titleDefaultColorDates: PropTypes.object,
+    titleSelectionColorDates: PropTypes.object,
+    subtitleDefaultColorDates: PropTypes.object,
+    subtitleSelectionColorDates: PropTypes.object,
 
     // 头部样式
-    headerMinimumDissolvedAlpha: React.PropTypes.number,
-    headerDateFormat: React.PropTypes.string
+    headerMinimumDissolvedAlpha: PropTypes.number,
+    headerDateFormat: PropTypes.string
   }
 
   static defaultProps = {
@@ -115,7 +116,7 @@ export default class FSCalendar extends Component {
 const RNFSCalendar = requireNativeComponent('RNFSCalendar', {
   propTypes: {
     ...FSCalendar.propTypes,
-    today: React.PropTypes.number
+    today: PropTypes.number
   }
 })
 
